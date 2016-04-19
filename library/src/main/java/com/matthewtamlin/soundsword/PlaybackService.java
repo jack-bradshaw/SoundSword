@@ -151,7 +151,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	private final ExecutorService callbackExecutor = Executors.newSingleThreadExecutor();
 
 	/**
-	 * The listener to receive callbacks when  playback completes.
+	 * The listener to receive callbacks when playback completes.
 	 */
 	private OnPlaybackCompleteListener onPlaybackCompleteListener;
 
