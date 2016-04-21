@@ -2,6 +2,8 @@
 # SoundSword
 SoundSword is an Android library which massively simplifies the task of playing audio in the background. The [PlaybackService](library/src/main/java/com/matthewtamlin/soundsword/PlaybackService.java) class of the library is designed to play any object which implements the [PlayableMedia](library/src/main/java/com/matthewtamlin/soundsword/PlayableMedia.java) interface. At the core of the service is the Android MediaPlayer API, but you no longer need to worry about nasty try-catch blocks or illegal state exceptions. The service tracks the internal state of the media player to make sure that only allowed operations are requested. If an operation which cannot be performed is requested, then the service will intercept the operation and prevent it from being executed.
 
+To use this library, add `compile 'com.matthew-tamlin:sound-sword:1.0.1'` to your gradle build file.
+
 ## PlaybackService
 The PlaybackService class is the primary class of this library. Since services operate independently of the activity lifecycle, instances of PlaybackService can be used to play media as the user navigates between activities or when the app is in the background. Binding to the service allows clients to control playback, and registering for callbacks allows clients to receive feedback. 
 
