@@ -335,7 +335,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	private void registerListeners() {
-		playbackService.setOnOperationFinishedListener(
+		playbackService.addOnOperationFinishedListener(
 				new PlaybackService.OnOperationFinishedListener() {
 					@Override
 					public void onOperationFinished(PlaybackService service,
@@ -346,7 +346,7 @@ public class TestPlaybackService extends AppCompatActivity {
 					}
 				});
 
-		playbackService.setOnOperationStartedListener(
+		playbackService.addOnOperationStartedListener(
 				new PlaybackService.OnOperationStartedListener() {
 					@Override
 					public void OnOperationStarted(PlaybackService service,
@@ -358,7 +358,7 @@ public class TestPlaybackService extends AppCompatActivity {
 					}
 				});
 
-		playbackService.setOnPendingOperationsCancelledListener(
+		playbackService.addOnPendingOperationsCancelledListener(
 				new PlaybackService.OnPendingOperationsCancelledListener() {
 					@Override
 					public void onPendingOperationsCancelled(PlaybackService service) {
@@ -366,7 +366,7 @@ public class TestPlaybackService extends AppCompatActivity {
 					}
 				});
 
-		playbackService.setOnPlaybackCompleteListener(
+		playbackService.addOnPlaybackCompleteListener(
 				new PlaybackService.OnPlaybackCompleteListener() {
 					@Override
 					public void onPlaybackComplete(PlaybackService service,
