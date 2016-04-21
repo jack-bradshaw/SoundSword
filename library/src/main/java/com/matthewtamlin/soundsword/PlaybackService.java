@@ -36,7 +36,9 @@ import android.view.SurfaceHolder;
 import com.matthewtamlin.android_utilities_library.helpers.AudioFocusHelper;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -167,22 +169,24 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	/**
 	 * The listener to receive callbacks when playback completes.
 	 */
-	private OnPlaybackCompleteListener onPlaybackCompleteListener;
+	private final Set<OnPlaybackCompleteListener> onPlaybackCompleteListeners = new HashSet<>();
 
 	/**
 	 * The listener to receive callbacks when playbackExecutor is shutdown.
 	 */
-	private OnPendingOperationsCancelledListener onPendingOperationsCancelledListener = null;
+	private final Set<OnPendingOperationsCancelledListener>
+			onPendingOperationsCancelledListeners = new HashSet<>();
 
 	/**
 	 * The listener to receive callbacks when a queued operation is started.
 	 */
-	private OnOperationStartedListener onOperationStartedListener = null;
+	private final Set<OnOperationStartedListener> onOperationStartedListeners = new HashSet<>();
 
 	/**
 	 * The listener to receive callbacks when the active operation completes.
 	 */
-	private OnOperationFinishedListener onOperationFinishedListener = null;
+	private final Set<OnOperationFinishedListener> onOperationFinishedListeners =
+			new HashSet<>();
 
 	/**
 	 * Default value for the volume during audio focus ducking.
@@ -621,60 +625,109 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	}
 
 	/**
-	 * Registers an OnPendingOperationsCancelledListener to receive callbacks from this
-	 * PlaybackService. Callbacks are not delivered on the main thread or the playback thread,
-	 * instead they are delivered on a separate callback thread. Only one callback thread exists for
-	 * each PlaybackService, so only one callback event can execute at a time. Calling this method
-	 * will replace any previously registered listener.
+	 * Registers an OnPlaybackCompleteListener to receive callbacks from this PlaybackService.
+	 * Callbacks are not delivered on the main thread or the playback thread, instead they are
+	 * delivered on a separate callback thread. Only one callback thread exists for each
+	 * PlaybackService, so only one callback event can execute at a time.
 	 *
 	 * @param listener
-	 * 		the listener to receive the callbacks, null to clear any existing listener
+	 * 		the listener to register
 	 */
-	public void setOnPlaybackCompleteListener(OnPlaybackCompleteListener listener) {
-		this.onPlaybackCompleteListener = listener;
+	public void addOnPlaybackCompleteListener(OnPlaybackCompleteListener listener) {
+		if (listener != null) {
+			onPlaybackCompleteListeners.add(listener);
+		}
+	}
+
+	/**
+	 * Removes an OnPlaybackCompleteListener from this PlaybackService. The method returns normally
+	 * if the supplied listener is not registered.
+	 *
+	 * @param listener
+	 * 		the listener to unregister
+	 */
+	public void removeOnPlaybackCompleteListener(OnPlaybackCompleteListener listener) {
+		onPlaybackCompleteListeners.remove(listener);
 	}
 
 	/**
 	 * Registers an OnPendingOperationsCancelledListener to receive callbacks from this
 	 * PlaybackService. Callbacks are not delivered on the main thread or the playback thread,
 	 * instead they are delivered on a separate callback thread. Only one callback thread exists for
-	 * each PlaybackService, so only one callback event can execute at a time. Calling this method
-	 * will replace any previously registered listener.
+	 * each PlaybackService, so only one callback event can execute at a time.
 	 *
 	 * @param listener
-	 * 		the listener to receive the callbacks, null to clear any existing listener
+	 * 		the listener to register
 	 */
-	public void setOnPendingOperationsCancelledListener(OnPendingOperationsCancelledListener
+	public void addOnPendingOperationsCancelledListener(OnPendingOperationsCancelledListener
 			listener) {
-		onPendingOperationsCancelledListener = listener;
+		if (listener != null) {
+			onPendingOperationsCancelledListeners.add(listener);
+		}
+	}
+
+	/**
+	 * Removes an OnPendingOperationsClearedListener from this PlaybackService. The method returns
+	 * normally if the supplied listener is not registered.
+	 *
+	 * @param listener
+	 * 		the listener to unregister
+	 */
+	public void removeOnPendingOperationsCancelledListener(OnPendingOperationsCancelledListener
+			listener) {
+		onPendingOperationsCancelledListeners.remove(listener);
 	}
 
 	/**
 	 * Registers an OnOperationStartedListener to receive callbacks from this PlaybackService.
 	 * Callbacks are not delivered on the main thread or the playback thread, instead they are
 	 * delivered on a separate callback thread. Only one callback thread exists for each
-	 * PlaybackService, so only one callback event can execute at a time. Calling this method will
-	 * replace any previously registered listener.
+	 * PlaybackService, so only one callback event can execute at a time.
 	 *
 	 * @param listener
-	 * 		the listener to receive the callbacks, null to clear any existing listener
+	 * 		the listener to register
 	 */
-	public void setOnOperationStartedListener(OnOperationStartedListener listener) {
-		this.onOperationStartedListener = listener;
+	public void addOnOperationStartedListener(OnOperationStartedListener listener) {
+		if (listener != null) {
+			onOperationStartedListeners.add(listener);
+		}
+	}
+
+	/**
+	 * Removes an OnOperationStartedListener from this PlaybackService. The method returns normally
+	 * if the supplied listener is not registered.
+	 *
+	 * @param listener
+	 * 		the listener to unregister
+	 */
+	public void removeOnOperationStartedListener(OnOperationStartedListener listener) {
+		onOperationStartedListeners.remove(listener);
 	}
 
 	/**
 	 * Registers an OnOperationFinishedListener to receive callbacks from this PlaybackService.
 	 * Callbacks are not delivered on the main thread or the playback thread, instead they are
 	 * delivered on a separate callback thread. Only one callback thread exists for each
-	 * PlaybackService, so only one callback event can execute at a time. Calling this method will
-	 * replace any previously registered listener.
+	 * PlaybackService, so only one callback event can execute at a time.
 	 *
 	 * @param listener
-	 * 		the listener to receive the callbacks, null to clear any existing listener
+	 * 		the listener to receive the callbacks
 	 */
-	public void setOnOperationFinishedListener(OnOperationFinishedListener listener) {
-		onOperationFinishedListener = listener;
+	public void addOnOperationFinishedListener(OnOperationFinishedListener listener) {
+		if (listener != null) {
+			onOperationFinishedListeners.add(listener);
+		}
+	}
+
+	/**
+	 * Removes an OnOperationFinishedListener from this PlaybackService. The method returns normally
+	 * if the supplied listener is not registered.
+	 *
+	 * @param listener
+	 * 		the listener to unregister
+	 */
+	public void removeOnOperationFinishedListener(OnOperationFinishedListener listener) {
+		onOperationFinishedListeners.remove(listener);
 	}
 
 	/**
@@ -980,41 +1033,39 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	}
 
 	/**
-	 * Invokes the callback method in the OnPlaybackCompleteListener of this PlaybackService (if one
-	 * has been registered). The callback runs on the callback thread.
+	 * Invokes the callback method in the each registered OnPlaybackCompleteListener of this
+	 * PlaybackService.
 	 */
 	private void callOnPlaybackCompleteListener() {
 		callbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (onPlaybackCompleteListener != null) {
-					onPlaybackCompleteListener
-							.onPlaybackComplete(PlaybackService.this, mediaSource);
+				for (OnPlaybackCompleteListener l : onPlaybackCompleteListeners) {
+					l.onPlaybackComplete(PlaybackService.this, mediaSource);
 				}
 			}
 		});
 	}
 
 	/**
-	 * Invokes the callback method in the OnPendingOperationsCancelledListener of this
-	 * PlaybackService (if one has been registered). The callback runs on the callback thread.
+	 * Invokes the callback method in the each registered OnPendingOperationsCancelledListener of
+	 * this PlaybackService.
 	 */
 	private void callOnPendingOperationsCancelledListener() {
 		callbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (onPendingOperationsCancelledListener != null) {
-					onPendingOperationsCancelledListener
-							.onPendingOperationsCancelled(PlaybackService.this);
+				for (OnPendingOperationsCancelledListener l :
+						onPendingOperationsCancelledListeners) {
+					l.onPendingOperationsCancelled(PlaybackService.this);
 				}
 			}
 		});
 	}
 
 	/**
-	 * Invokes the callback method in the OnOperationStartedListener of this PlaybackService (if one
-	 * has been registered). The callback runs on the callback thread. No callback will be issued if
-	 * {@code operation} is null.
+	 * Invokes the callback method in each registered OnOperationStartedListener of this
+	 * PlaybackService. No callbacks will be issued if {@code operation} is null.
 	 *
 	 * @param operation
 	 * 		he operation which started
@@ -1023,17 +1074,18 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 		callbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (onOperationStartedListener != null && operation != null) {
-					onOperationStartedListener.OnOperationStarted(PlaybackService.this, operation);
+				if (operation != null) {
+					for (OnOperationStartedListener l : onOperationStartedListeners) {
+						l.OnOperationStarted(PlaybackService.this, operation);
+					}
 				}
 			}
 		});
 	}
 
 	/**
-	 * Invokes the callback method in the OnOperationFinishedListener of this PlaybackService (if
-	 * one has been registered). The callback runs on the callback thread. No callback will be
-	 * issued if {@code operation} is null.
+	 * Invokes the callback method in each registered OnOperationFinishedListener of this
+	 * PlaybackService. No callbacks will be issued if {@code operation} is null.
 	 *
 	 * @param operation
 	 * 		the operation which finished
@@ -1045,9 +1097,11 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 		callbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
-				if (onOperationFinishedListener != null && operation != null) {
-					onOperationFinishedListener.onOperationFinished(PlaybackService.this,
-							operation, failureMode);
+				if (operation != null) {
+					for (OnOperationFinishedListener l : onOperationFinishedListeners) {
+						l.onOperationFinished(PlaybackService.this,
+								operation, failureMode);
+					}
 				}
 			}
 		});
