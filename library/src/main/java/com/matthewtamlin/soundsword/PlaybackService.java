@@ -41,26 +41,30 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * A Service which enables background media playback. Clients can bind to the service and register
- * to receive callbacks. Since a started Service is independent of the activity lifecycle, this
- * Service can be used to play media to the user when the app is in the background, or as the user
- * navigates between activities. The service provides a means for self-terminating once playback has
- * completed (if desired). This Service has two types of methods: Request operation methods and
- * standard methods. <p> The request operation methods return almost immediately as they simply
- * queue operations for asynchronous processing. Operations are executed one at a time on the
- * 'playback thread' to avoid blocking the UI. Operations are performed in the order which they are
- * queued, with the exception of the change media source operation. When this operation is
- * requested, all pending operations are cancelled, the current operation is terminated, and a
- * change media operation is executed. Whenever an operation finishes executing, the next operation
- * in the queue is immediately executed until there are no more operations to execute. See the
- * Javadoc of the request methods for a more in depth explanation of what each operation does. The
- * operations which can be requested are:<ul><li>Change media source ({@link
+ * A Service which enables background media playback. Binding to the service allows clients to
+ * control playback, and registering for callbacks allows clients to receive feedback. Since
+ * services operate independently of the activity lifecycle, instances of PlaybackService can be
+ * used to play media as the user navigates between activities or when the app is in the background.
+ * The service provides a means for self-terminating once playback has completed (if desired). The
+ * service is controlled with two kinds of methods: Request operation methods and standard methods.
+ * <p/>
+ * Request operation methods return almost immediately as they simply queue operations for
+ * asynchronous processing. Operations are executed one at a time on the 'playback thread' to avoid
+ * blocking the UI. Operations are executed in the order in which they are requested, with the
+ * exception of the change media source operation. Requesting this operation terminates the current
+ * operation and cancels all pending operations. Whenever an operation finishes, the next operation
+ * in the queue is immediately executed until there are no more operations to execute. The
+ * operations which can be requested are: <ul><li>Change media source ({@link
  * #requestChangeMediaSourceOperation(PlayableMedia, Map)}).</li> <li>Start/resume playback (see
  * {@link #requestPlayMediaOperation()}).</li> <li>Pause playback ({@link
  * #requestPauseMediaOperation()}).</li> <li>Stop playback ({@link #requestStopMediaOperation()}).</li>
- * <li>Seek to a particular position ({@link #requestSeekToOperation(int)}).</li></ul><p>The
- * standard methods can be called at any time and will be executed on the calling thread. The
- * standard methods allow the client to:<ul><li>Change the volume profile ({@link
+ * <li>Seek to a particular position ({@link #requestSeekToOperation(int)}).</li></ul>See the
+ * Javadoc of the request operation methods for a more in depth explanation of what each operation
+ * does.
+ * <p/>
+ * The standard methods allow the client to configure the service or query its properties. The
+ * standard methods do not perform any asynchronous operations and will run entirely on the calling
+ * thread. The standard methods allow the client to:<ul><li>Change the volume profile ({@link
  * #setVolumeProfile(VolumeProfile)}).</li><li>Get the current playback position ({@link
  * #getCurrentPosition()}).</li><li>Determine if the media is currently playing ({@link
  * #isPlaying()}).</li><li>Determine if an operation can be performed at the current time ({@link
@@ -68,25 +72,35 @@ import java.util.concurrent.Executors;
  * #enableLooping(boolean)}).</li><li>Configure the video output ({@link
  * #setDisplay(SurfaceHolder)}).</li><li>Register for callbacks.</li><li>Set the Service to stop
  * itself when playback completes ({@link #stopServiceAutomatically(boolean)}).</li><li>Terminate
- * the current operation, clear pending operations and terminate playback ({@link
- * #reset()}).</li></ul> <p>There are four callbacks which can be issued if the client registers to
- * receive them. Callbacks are delivered on a separate 'callback thread', therefore it is important
- * that the callback listeners do not perform UI related tasks without using {@link
- * android.app.Activity#runOnUiThread(Runnable)}. The callbacks are:<ul><li>{@link
- * OnOperationStartedListener}.</li><li>{@link OnOperationFinishedListener}.</li><li>{@link
- * OnPendingOperationsCancelledListener}</li><li >{@link OnPlaybackCompleteListener}.</li></ul >The
- * {@code OnOperationStartedListener} callback is invoked whenever a queued operation is started; it
- * contains information about the started operation. The {@code OnOperationFinishedListener} is
- * called whenever an operation finishes, either by successful completion or failure; it specifies
- * which operation finished and what the failure mode was (if any). The {@code
- * OnPendingOperationCancelledListener} is called whenever the pending operations are cancelled,
- * either by the Service or at the request of the client. The {@code OnPlaybackCompleteListener} is
- * called whenever the end of the media is successfully reached; it may be called multiple times if
- * looping is enabled.</li><p>This Service conforms to the standard Android guidelines regarding
- * media playback. Playback will stop whenever audio focus is lost, and playback will pause whenever
- * the system indicates that playback is "becoming noisy" (e.g. headphones are being unplugged).
- * Requests for transient audio ducking result in the volume changing to the ducking volume
- * specified by the volume profile (see {@link #setVolumeProfile(VolumeProfile)}.
+ * the current operation, clear pending operations, and terminate playback ({@link
+ * #reset()}).</li></ul>See the Javadoc of the standard methods for a more in depth explanation of
+ * what each method does.
+ * <p/>
+ * A PlaybackService can pass information back to the client by means of four separate callbacks.
+ * Callbacks are delivered one at a time on the 'callback thread', therefore it is important that
+ * the callback listeners do not perform UI related tasks without using the {@link
+ * android.app.Activity#runOnUiThread(Runnable)} method. The callbacks are:<ul><li>{@link
+ * OnOperationStartedListener}. This callback is invoked by the PlaybackService whenever an
+ * operation is started. The callback is passed a reference to the service that issued the callback,
+ * as well as {@link Operation} constant which identifies the operation.</li><li>{@link
+ * OnOperationFinishedListener}. This callback is invoked by the PlaybackService whenever an
+ * operation finishes, either by successful completion or failure. The callback is passed a
+ * reference to the service that issued the callback, as well as an {@link Operation} constant which
+ * identifies the operation and a {@link FailureMode} constant which identifies the failure mode.
+ * The failure mode is null if the operation completed successfully.</li><li>{@link
+ * OnPendingOperationsCancelledListener}. This callback is invoked by the PlaybackService whenever
+ * the pending operation queue is cleared, regardless of whether or not the queue was empty. The
+ * callback is passed a reference to the PlaybackService which issued the callback.</li><li>{@link
+ * OnPlaybackCompleteListener}. This callback is invoked by the PlaybackService whenever the end of
+ * the current media is reached. The callback may be called multiple times if looping has been
+ * enabled. The callback is passed a reference to the PlaybackService which issued the
+ * callback.</li></ul>See the Javadoc of the callbacks for a more in depth explanation.
+ * <p/>
+ * This Service conforms to the standard Android guidelines regarding media playback. Playback will
+ * stop whenever audio focus is lost, and playback will pause whenever the system indicates that
+ * playback is "becoming noisy" (e.g. headphones are being unplugged). Requests for transient audio
+ * ducking result in the volume changing to the ducking volume specified by the volume profile (see
+ * {@link #setVolumeProfile(VolumeProfile)}.
  */
 public class PlaybackService extends Service implements AudioManager.OnAudioFocusChangeListener {
 	/**
