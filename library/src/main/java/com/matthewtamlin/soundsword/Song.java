@@ -25,7 +25,7 @@ import java.io.File;
 /**
  * A single Song stored on disk. No IO operations occur at instantiation.
  */
-public class Song implements PlayableMedia {
+public final class Song implements PlayableMedia {
 	/**
 	 * The file on disk containing this Song.
 	 */
@@ -84,12 +84,12 @@ public class Song implements PlayableMedia {
 	}
 
 	@Override
-	public Uri getUri() {
+	public final Uri getUri() {
 		return Uri.fromFile(file);
 	}
 
 	@Override
-	public boolean equals(Object o) {
+	public final boolean equals(Object o) {
 		if (o == this) {
 			return true;
 		} else if (o == null) {
@@ -103,7 +103,7 @@ public class Song implements PlayableMedia {
 	}
 
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		HashCodeBuilder b = new HashCodeBuilder();
 		b.append(file);
 		return b.toHashCode();
