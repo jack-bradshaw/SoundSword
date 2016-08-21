@@ -371,9 +371,8 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	}
 
 	/**
-	 * Queues an operation to play (i.e. start/resume) the current media source. This operation will
-	 * fail if the media has not been set with {@link #requestChangeMediaSourceOperation
-	 * (PlayableMedia, Map)}.
+	 * Queues an operation to play the current media source. This operation will fail if the media
+	 * has not been set with {@link #requestChangeMediaSourceOperation (PlayableMedia, Map)}.
 	 * <p/>
 	 * This operation is not guaranteed to start as it may be cancelled prior to being executed.
 	 * Successful completion is also not guaranteed; the operation will finish successfully when
