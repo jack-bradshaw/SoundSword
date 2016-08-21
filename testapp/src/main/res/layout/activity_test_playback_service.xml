@@ -10,5 +10,79 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"/>
+        android:orientation="vertical">
+
+		<Button
+			android:text="Bind to service"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testBindUnbindService"/>
+
+		<Button
+			android:text="Start service"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testStartStopService"/>
+
+		<Button
+			android:text="Set media"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testSetMedia"/>
+
+		<Button
+			android:text="Play media"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testPlayMedia"/>
+
+		<Button
+			android:text="Pause media"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testPauseMedia"/>
+
+		<Button
+			android:text="Stop media"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testStopMedia"/>
+
+		<Button
+			android:text="Seek"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testSeek"/>
+
+		<Button
+			android:text="Enable looping"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testToggleLooping"/>
+
+		<Button
+			android:text="Show status"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testShowStatus"/>
+
+		<Button
+			android:text="Use quiet volume profile"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testChangeVolume"/>
+
+		<Button
+			android:text="Reset"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testReset"/>
+		<Button
+			android:text="Enable automatic stop"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testToggleAutomaticStop"/>
+
+
+	</LinearLayout>
 </ScrollView>
