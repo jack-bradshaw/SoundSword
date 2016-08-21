@@ -350,7 +350,8 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * @throws IllegalArgumentException
 	 * 		if {@code mediaSource} is null
 	 */
-	public void requestChangeMediaSourceOperation(final PlayableMedia mediaSource, final Map<String,
+	public synchronized void requestChangeMediaSourceOperation(final PlayableMedia mediaSource,
+			final Map<String,
 			String> headers) {
 		if (mediaSource == null) {
 			throw new IllegalArgumentException("mediaSource cannot be null");
@@ -381,7 +382,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * callback. If the failure mode is not recoverable, all pending operations will be cancelled
 	 * (see {@link FailureMode#isRecoverable()}).
 	 */
-	public void requestPlayMediaOperation() {
+	public synchronized void requestPlayMediaOperation() {
 		playbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -403,7 +404,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * mode is not recoverable, all pending operations will be cancelled (see {@link
 	 * FailureMode#isRecoverable()}).
 	 */
-	public void requestPauseMediaOperation() {
+	public synchronized void requestPauseMediaOperation() {
 		playbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -425,7 +426,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * provided in the OnOperationFinishedListener callback. If the failure mode is not recoverable,
 	 * all pending operations will be cancelled (see {@link FailureMode#isRecoverable()}).
 	 */
-	public void requestStopMediaOperation() {
+	public synchronized void requestStopMediaOperation() {
 		playbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
@@ -447,7 +448,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * mode is not recoverable, all pending operations will be cancelled (see {@link
 	 * FailureMode#isRecoverable()}).
 	 */
-	public void requestSeekToOperation(final int offsetMs) {
+	public synchronized void requestSeekToOperation(final int offsetMs) {
 		playbackExecutor.execute(new Runnable() {
 			@Override
 			public void run() {
