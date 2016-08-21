@@ -332,16 +332,16 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	}
 
 	/**
-	 * Requests an operation to change the current media source. Requesting this operation will
-	 * terminate playback of the current media and cancel all pending operations. The supplied media
-	 * will be loaded into memory so that it can be played upon a request from {@link
+	 * Queues an operation to change the current media source. The supplied media will be loaded
+	 * into memory so that it can be played upon a request from {@link
 	 * #requestPlayMediaOperation()}.
 	 * <p/>
-	 * This operation is guaranteed to start, however successful completion is not guaranteed. The
-	 * operation will finish successfully when the media source has been loaded into memory, but it
-	 * may complete unsuccessfully before then. If the operation fails, the reason for the failure
-	 * will be provided in the OnOperationFinishedListener callback. Failure will result in all
-	 * pending operations being cancelled.
+	 * This operation is not guaranteed to start as it may be cancelled prior to being executed.
+	 * Successful completion is also not guaranteed; the operation will finish successfully when the
+	 * media source has been loaded into memory, but it may finish unsuccessfully before then. If
+	 * the operation fails, the reason for the failure will be provided in the
+	 * OnOperationFinishedListener callback. Failure will result in all pending operations being
+	 * cancelled.
 	 *
 	 * @param mediaSource
 	 * 		the media source to use, not null
@@ -351,14 +351,10 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * 		if {@code mediaSource} is null
 	 */
 	public synchronized void requestChangeMediaSourceOperation(final PlayableMedia mediaSource,
-			final Map<String,
-			String> headers) {
+			final Map<String, String> headers) {
 		if (mediaSource == null) {
 			throw new IllegalArgumentException("mediaSource cannot be null");
 		}
-
-		// Pending operations are no longer valid
-		restartPlaybackExecutor();
 
 		playbackExecutor.execute(new Runnable() {
 			@Override
@@ -377,7 +373,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * <p/>
 	 * This operation is not guaranteed to start as it may be cancelled prior to being executed.
 	 * Successful completion is also not guaranteed; the operation will finish successfully when
-	 * playback of the current media starts, but it may complete unsuccessfully before then. If the
+	 * playback of the current media starts, but it may finish unsuccessfully before then. If the
 	 * operation fails, the failure mode will be provided in the OnOperationFinishedListener
 	 * callback. If the failure mode is not recoverable, all pending operations will be cancelled
 	 * (see {@link FailureMode#isRecoverable()}).
@@ -399,8 +395,8 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * <p/>
 	 * This operation is not guaranteed to start as it may be cancelled prior to being executed.
 	 * Successful completion is also not guaranteed; the operation will finish successfully when
-	 * playback is paused, but it may complete unsuccessfully before then. If the operation fails,
-	 * the failure mode will be provided in the OnOperationFinishedListener callback. If the failure
+	 * playback is paused, but it may finish unsuccessfully before then. If the operation fails, the
+	 * failure mode will be provided in the OnOperationFinishedListener callback. If the failure
 	 * mode is not recoverable, all pending operations will be cancelled (see {@link
 	 * FailureMode#isRecoverable()}).
 	 */
@@ -422,7 +418,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * Stopping playback involves clearing the current media from memory. This operation is not
 	 * guaranteed to start as it may be cancelled prior to being executed. Successful completion is
 	 * also not guaranteed; the operation will finish successfully when playback is stopped, but it
-	 * may complete unsuccessfully before then. If the operation fails, the failure mode will be
+	 * may finish unsuccessfully before then. If the operation fails, the failure mode will be
 	 * provided in the OnOperationFinishedListener callback. If the failure mode is not recoverable,
 	 * all pending operations will be cancelled (see {@link FailureMode#isRecoverable()}).
 	 */
@@ -443,7 +439,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	 * <p/>
 	 * This operation is not guaranteed to start as it may be cancelled prior to being executed.
 	 * Successful completion is also not guaranteed; the operation will finish successfully when
-	 * playback seeks, but it may complete unsuccessfully before then. If the operation fails, the
+	 * playback seeks, but it may finish unsuccessfully before then. If the operation fails, the
 	 * failure mode will be provided in the OnOperationFinishedListener callback. If the failure
 	 * mode is not recoverable, all pending operations will be cancelled (see {@link
 	 * FailureMode#isRecoverable()}).
