@@ -71,7 +71,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	private ScrollView rootView;
 
 	/**
-	 * The localPlayableMedias to play.
+	 * The media to play.
 	 */
 	private final List<LocalPlayableMedia> localPlayableMedias = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	/**
 	 * Whether or not the service has been explicitly started.
 	 */
-	private boolean serviceIsStarted = false;
+	private boolean serviceExplicitlyStarted = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,13 +135,13 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	public void testStartStopService(final View v) {
-		if (serviceIsStarted) {
+		if (serviceExplicitlyStarted) {
 			stopService(new Intent(TestPlaybackService.this, PlaybackService.class));
-			serviceIsStarted = false;
+			serviceExplicitlyStarted = false;
 			((Button) v).setText("Start service");
 		} else {
 			startService(new Intent(TestPlaybackService.this, PlaybackService.class));
-			serviceIsStarted = true;
+			serviceExplicitlyStarted = true;
 			((Button) v).setText("Stop service");
 		}
 	}
