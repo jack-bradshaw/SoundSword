@@ -23,23 +23,24 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.io.File;
 
 /**
- * A single Song stored on disk. No IO operations occur at instantiation.
+ * A PlayableMedia object stored on disk.
  */
-public final class Song implements PlayableMedia {
+public final class LocalPlayableMedia implements PlayableMedia {
 	/**
-	 * The file on disk containing this Song.
+	 * The file on disk containing this media.
 	 */
 	private final File file;
 
 	/**
-	 * Constructs a new Song instance. The provided File is not accessed during instantiation.
+	 * Constructs a new LocalPlayableMedia instance. The provided File is not accessed during
+	 * instantiation.
 	 *
 	 * @param file
-	 * 		the File on disk containing this Song
+	 * 		the File on disk containing this media
 	 * @throws IllegalArgumentException
 	 * 		if {@code file} is null
 	 */
-	private Song(final File file) {
+	private LocalPlayableMedia(final File file) {
 		if (file == null) {
 			throw new IllegalArgumentException("file cannot be null");
 		}
@@ -48,39 +49,39 @@ public final class Song implements PlayableMedia {
 	}
 
 	/**
-	 * Creates a new Song from a file path. The File at {@code path} is not accessed during this
-	 * method's execution.
+	 * Creates a new LocalPlayableMedia from a file path. The File at {@code path} is not accessed
+	 * during this method's execution.
 	 *
 	 * @param path
-	 * 		the path (relative or absolute) of the the File on disk containing this Song, not null
-	 * @return the new Song
+	 * 		the path to the File on disk containing this media, not null
+	 * @return the new LocalPlayableMedia
 	 * @throws IllegalArgumentException
 	 * 		if {@code path} is null
 	 */
-	public static Song fromFilePath(String path) {
+	public static LocalPlayableMedia fromFilePath(String path) {
 		if (path == null) {
 			throw new IllegalArgumentException("path cannot be null");
 		}
 
-		return new Song(new File(path));
+		return new LocalPlayableMedia(new File(path));
 	}
 
 	/**
-	 * Creates a new Song from a File. The provided File is not accessed during this method's
-	 * execution.
+	 * Creates a new LocalPlayableMedia from a File. The provided File is not accessed during this
+	 * method's execution.
 	 *
 	 * @param file
-	 * 		the File on disk containing this Song, not null
-	 * @return the new Song
+	 * 		the File on disk containing this media, not null
+	 * @return the new LocalPlayableMedia
 	 * @throws IllegalArgumentException
 	 * 		if {@code file} is null
 	 */
-	public static Song fromFile(final File file) {
+	public static LocalPlayableMedia fromFile(final File file) {
 		if (file == null) {
 			throw new IllegalArgumentException("file cannot be null");
 		}
 
-		return new Song(file);
+		return new LocalPlayableMedia(file);
 	}
 
 	@Override
@@ -94,10 +95,10 @@ public final class Song implements PlayableMedia {
 			return true;
 		} else if (o == null) {
 			return false;
-		} else if (!(o instanceof Song)) {
+		} else if (!(o instanceof LocalPlayableMedia)) {
 			return false;
 		} else {
-			final Song s = (Song) o;
+			final LocalPlayableMedia s = (LocalPlayableMedia) o;
 			return s.getUri().equals(this.getUri());
 		}
 	}
