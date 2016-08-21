@@ -77,13 +77,5 @@
 			android:layout_height="wrap_content"
 			android:onClick="testReset"
 			android:text="Reset"/>
-
-		<Button
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:onClick="testToggleAutomaticStop"
-			android:text="Enable automatic stop"/>
-
-
 	</LinearLayout>
 </ScrollView>
