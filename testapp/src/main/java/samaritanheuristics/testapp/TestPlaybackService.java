@@ -18,9 +18,9 @@ import android.widget.ScrollView;
 import com.matthewtamlin.android_utilities_library.helpers.AssetsHelper;
 import com.matthewtamlin.android_utilities_library.helpers.PermissionsHelper;
 import com.matthewtamlin.soundsword.ImmutableVolumeProfile;
+import com.matthewtamlin.soundsword.LocalPlayableMedia;
 import com.matthewtamlin.soundsword.PlayableMedia;
 import com.matthewtamlin.soundsword.PlaybackService;
-import com.matthewtamlin.soundsword.Song;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class TestPlaybackService extends AppCompatActivity {
 			.newInstance().withDuckingVolume(0.1f).withNormalVolume(1f);
 
 	/**
-	 * The filenames of the songs to play (stored in assets).
+	 * The filenames of the localPlayableMedias to play (stored in assets).
 	 */
 	private static final String[] TEST_SONG_FILENAMES = new String[]{"track1.mp3", "track2.mp3",
 			"track3.mp3", "track4.mp3"};
@@ -71,9 +71,9 @@ public class TestPlaybackService extends AppCompatActivity {
 	private ScrollView rootView;
 
 	/**
-	 * The songs to play.
+	 * The localPlayableMedias to play.
 	 */
-	private final List<Song> songs = new ArrayList<>();
+	private final List<LocalPlayableMedia> localPlayableMedias = new ArrayList<>();
 
 	/**
 	 * The index of the currently playing song.
@@ -116,7 +116,8 @@ public class TestPlaybackService extends AppCompatActivity {
 					TEST_MUSIC_LOCATION);
 
 			for (final String s : TEST_SONG_FILENAMES) {
-				songs.add(Song.fromFile(new File(TEST_MUSIC_LOCATION, "/" + s)));
+				localPlayableMedias
+						.add(LocalPlayableMedia.fromFile(new File(TEST_MUSIC_LOCATION, "/" + s)));
 			}
 		} catch (final IOException e) {
 			assertThat("Precondition failed. Could not prepare all music files", false);
@@ -147,8 +148,8 @@ public class TestPlaybackService extends AppCompatActivity {
 
 	public void testSetMedia(final View v) {
 		if (mediaServiceIsBound()) {
-			playbackService.requestChangeMediaSourceOperation(songs.get(mediaIndex), null);
-			mediaIndex = (mediaIndex + 1) % songs.size();
+			playbackService.requestChangeMediaSourceOperation(localPlayableMedias.get(mediaIndex), null);
+			mediaIndex = (mediaIndex + 1) % localPlayableMedias.size();
 		}
 	}
 
