@@ -109,4 +109,9 @@ public final class LocalPlayableMedia implements PlayableMedia {
 		b.append(file);
 		return b.toHashCode();
 	}
+
+	@Override
+	public String toString() {
+		return file.toString();
+	}
 }
