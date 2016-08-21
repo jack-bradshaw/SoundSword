@@ -1,87 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".TestPlaybackService">
+	android:id="@+id/activity_test_playback_service_root"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".TestPlaybackService">
 
-    <LinearLayout
-        android:id="@+id/content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-		<Button
-			android:text="Bind to service"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:onClick="testBindUnbindService"/>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
 
 		<Button
-			android:text="Start service"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testStartStopService"/>
+			android:onClick="testBindUnbindService"
+			android:text="Bind to service"/>
 
 		<Button
-			android:text="Set media"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testSetMedia"/>
+			android:onClick="testStartStopService"
+			android:text="Start service"/>
 
 		<Button
-			android:text="Play media"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testPlayMedia"/>
+			android:onClick="testSetMedia"
+			android:text="Set media"/>
 
 		<Button
-			android:text="Pause media"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testPauseMedia"/>
+			android:onClick="testPlayMedia"
+			android:text="Play media"/>
 
 		<Button
-			android:text="Stop media"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testStopMedia"/>
+			android:onClick="testPauseMedia"
+			android:text="Pause media"/>
 
 		<Button
-			android:text="Seek"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testSeek"/>
+			android:onClick="testStopMedia"
+			android:text="Stop media"/>
 
 		<Button
-			android:text="Enable looping"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testToggleLooping"/>
+			android:onClick="testSeek"
+			android:text="Seek"/>
 
 		<Button
-			android:text="Show status"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testShowStatus"/>
+			android:onClick="testToggleLooping"
+			android:text="Enable looping"/>
 
 		<Button
-			android:text="Use quiet volume profile"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testChangeVolume"/>
+			android:onClick="testShowStatus"
+			android:text="Show status"/>
 
 		<Button
-			android:text="Reset"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testReset"/>
+			android:onClick="testChangeVolume"
+			android:text="Use quiet volume profile"/>
+
 		<Button
-			android:text="Enable automatic stop"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:onClick="testToggleAutomaticStop"/>
+			android:onClick="testReset"
+			android:text="Reset"/>
+
+		<Button
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:onClick="testToggleAutomaticStop"
+			android:text="Enable automatic stop"/>
 
 
 	</LinearLayout>
