@@ -89,7 +89,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test_playback_service);
-		initialiseTestingEnvironment();
+		setup();
 		rootView = (ScrollView) findViewById(R.id.activity_test_playback_service_root);
 	}
 
@@ -99,7 +99,10 @@ public class TestPlaybackService extends AppCompatActivity {
 		unbindPlaybackService();
 	}
 
-	private void initialiseTestingEnvironment() {
+	/**
+	 * Initialises the testing environment and checks that all preconditions pass.
+	 */
+	private void setup() {
 		// Check precondition 1: Read/write external file storage permission is granted
 		final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 		assertThat("Precondition failed. Write external storage permission is required.",
