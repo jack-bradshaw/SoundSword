@@ -127,6 +127,12 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Verifies that the service can be bound and unbound correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testBindUnbindService(final View v) {
 		if (playbackServiceIsBound()) {
 			unbindPlaybackService();
@@ -137,6 +143,12 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Verifies that the service can be started and stopped correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testStartStopService(final View v) {
 		if (serviceExplicitlyStarted) {
 			stopService(new Intent(TestPlaybackService.this, PlaybackService.class));
@@ -149,37 +161,74 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Verifies that the media source can be set correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testSetMedia(final View v) {
 		if (playbackServiceIsBound()) {
-			playbackService.requestChangeMediaSourceOperation(localPlayableMedias.get(mediaIndex), null);
+			playbackService
+					.requestChangeMediaSourceOperation(localPlayableMedias.get(mediaIndex), null);
 			mediaIndex = (mediaIndex + 1) % localPlayableMedias.size();
 		}
 	}
 
+	/**
+	 * Verifies that playback can be started correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testPlayMedia(final View v) {
 		if (playbackServiceIsBound()) {
 			playbackService.requestPlayMediaOperation();
 		}
 	}
 
+	/**
+	 * Verifies that playback can be paused correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testPauseMedia(final View v) {
 		if (playbackServiceIsBound()) {
 			playbackService.requestPauseMediaOperation();
 		}
 	}
 
+	/**
+	 * Verifies that playback can be stopped correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testStopMedia(final View v) {
 		if (playbackServiceIsBound()) {
 			playbackService.requestStopMediaOperation();
 		}
 	}
 
+	/**
+	 * Verifies that playback can seek to a particular position correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testSeek(final View v) {
 		if (playbackServiceIsBound()) {
 			playbackService.requestSeekToOperation(4000);
 		}
 	}
 
+	/**
+	 * Verifies that looping can be enabled and disabled correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testToggleLooping(final View v) {
 		if (playbackServiceIsBound()) {
 			playbackService.enableLooping(!playbackService.loopingIsEnabled());
@@ -188,6 +237,13 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Displays the current track position to verify that the playback service can be correctly
+	 * queried.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testShowStatus(final View v) {
 		if (playbackServiceIsBound()) {
 			Snackbar.make(rootView, "Current position: " + playbackService.getCurrentPosition(),
@@ -195,6 +251,12 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Verifies that the playback volume can be changed correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testChangeVolume(final View v) {
 		if (playbackServiceIsBound()) {
 			if (playbackService.getVolumeProfile() == QUIET_VOLUME_PROFILE) {
@@ -207,24 +269,21 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Verifies that the playback service can be reset correctly.
+	 *
+	 * @param v
+	 * 		the View which was clicked to initiate the test
+	 */
 	public void testReset(final View v) {
 		if (playbackServiceIsBound()) {
 			playbackService.reset();
 		}
 	}
 
-	public void testToggleAutomaticStop(final View v) {
-		if (playbackServiceIsBound()) {
-			if (playbackService.serviceWillStopAutomatically()) {
-				playbackService.stopServiceAutomatically(false);
-				((Button) v).setText("Enable automatic stop");
-			} else {
-				playbackService.stopServiceAutomatically(true);
-				((Button) v).setText("Disable automatic stop");
-			}
-		}
-	}
-
+	/**
+	 * Registers listeners to the playback service.
+	 */
 	public void registerListeners() {
 		if (playbackServiceIsBound()) {
 			playbackService.addOnOperationFinishedListener(
@@ -271,17 +330,26 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * @return true if the playback service is currently bound, false otherwise
+	 */
 	private boolean playbackServiceIsBound() {
 		return playbackService != null;
 	}
 
+	/**
+	 * Binds this Activity to the playback service if not already bound.
+	 */
 	private void bindPlaybackService() {
 		if (!playbackServiceIsBound()) {
-			Intent launchMediaService = new Intent(this, PlaybackService.class);
+			final Intent launchMediaService = new Intent(this, PlaybackService.class);
 			bindService(launchMediaService, mediaServiceConnection, BIND_AUTO_CREATE);
 		}
 	}
 
+	/**
+	 * Unbinds this Activity from the playback service if currently bound.
+	 */
 	private void unbindPlaybackService() {
 		if (playbackServiceIsBound()) {
 			unbindService(mediaServiceConnection);
@@ -289,6 +357,9 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
+	/**
+	 * Provides this Activity with access to a PlaybackService.
+	 */
 	private final ServiceConnection mediaServiceConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder binder) {
