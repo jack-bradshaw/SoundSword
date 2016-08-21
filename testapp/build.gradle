@@ -8,9 +8,8 @@ android {
         applicationId "samaritanheuristics.testapp"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,6 +22,4 @@ dependencies {
     compile project(':library')
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile files('libs/commons-io-2.4.jar')
-
-    testCompile 'junit:junit:4.12'
 }
