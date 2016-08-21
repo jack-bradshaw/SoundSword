@@ -125,7 +125,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	public void testBindUnbindService(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			unbindPlaybackService();
 			((Button) v).setText("Bind to service");
 		} else {
@@ -147,38 +147,38 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	public void testSetMedia(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.requestChangeMediaSourceOperation(localPlayableMedias.get(mediaIndex), null);
 			mediaIndex = (mediaIndex + 1) % localPlayableMedias.size();
 		}
 	}
 
 	public void testPlayMedia(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.requestPlayMediaOperation();
 		}
 	}
 
 	public void testPauseMedia(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.requestPauseMediaOperation();
 		}
 	}
 
 	public void testStopMedia(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.requestStopMediaOperation();
 		}
 	}
 
 	public void testSeek(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.requestSeekToOperation(4000);
 		}
 	}
 
 	public void testToggleLooping(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.enableLooping(!playbackService.loopingIsEnabled());
 			((Button) v).setText(
 					playbackService.loopingIsEnabled() ? "Disable looping" : "Enable looping");
@@ -186,14 +186,14 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	public void testShowStatus(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			Snackbar.make(rootView, "Current position: " + playbackService.getCurrentPosition(),
 					Snackbar.LENGTH_LONG).show();
 		}
 	}
 
 	public void testChangeVolume(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			if (playbackService.getVolumeProfile() == QUIET_VOLUME_PROFILE) {
 				playbackService.setVolumeProfile(LOUD_VOLUME_PROFILE);
 				((Button) v).setText("Use quiet volume profile");
@@ -205,13 +205,13 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	public void testReset(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.reset();
 		}
 	}
 
 	public void testToggleAutomaticStop(final View v) {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			if (playbackService.serviceWillStopAutomatically()) {
 				playbackService.stopServiceAutomatically(false);
 				((Button) v).setText("Enable automatic stop");
@@ -223,7 +223,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	}
 
 	public void registerListeners() {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			playbackService.addOnOperationFinishedListener(
 					new PlaybackService.OnOperationFinishedListener() {
 						@Override
@@ -268,19 +268,19 @@ public class TestPlaybackService extends AppCompatActivity {
 		}
 	}
 
-	private boolean mediaServiceIsBound() {
+	private boolean playbackServiceIsBound() {
 		return playbackService != null;
 	}
 
 	private void bindPlaybackService() {
-		if (!mediaServiceIsBound()) {
+		if (!playbackServiceIsBound()) {
 			Intent launchMediaService = new Intent(this, PlaybackService.class);
 			bindService(launchMediaService, mediaServiceConnection, BIND_AUTO_CREATE);
 		}
 	}
 
 	private void unbindPlaybackService() {
-		if (mediaServiceIsBound()) {
+		if (playbackServiceIsBound()) {
 			unbindService(mediaServiceConnection);
 			playbackService = null;
 		}
