@@ -257,7 +257,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 
 	@Override
 	public void onAudioFocusChange(int focusChange) {
-		// This method is designed to handle te ducking behaviour
+		// This method is designed to handle the ducking behaviour
 		switch (focusChange) {
 			case AudioManager.AUDIOFOCUS_GAIN: {
 				final float volume = volumeProfile.getNormalVolume();
