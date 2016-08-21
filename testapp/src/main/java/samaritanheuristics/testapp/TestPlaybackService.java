@@ -43,6 +43,12 @@ public class TestPlaybackService extends AppCompatActivity {
 			.getExternalStorageDirectory(), "/SoundSwordTesting");
 
 	/**
+	 * The filenames of the localPlayableMedias to play (stored in assets).
+	 */
+	private static final String[] TEST_SONG_FILENAMES = new String[]{"track1.mp3", "track2.mp3",
+			"track3.mp3", "track4.mp3"};
+
+	/**
 	 * Very quiet volume profile.
 	 */
 	private static final ImmutableVolumeProfile QUIET_VOLUME_PROFILE = ImmutableVolumeProfile
@@ -55,13 +61,7 @@ public class TestPlaybackService extends AppCompatActivity {
 			.newInstance().withDuckingVolume(0.1f).withNormalVolume(1f);
 
 	/**
-	 * The filenames of the localPlayableMedias to play (stored in assets).
-	 */
-	private static final String[] TEST_SONG_FILENAMES = new String[]{"track1.mp3", "track2.mp3",
-			"track3.mp3", "track4.mp3"};
-
-	/**
-	 * Plays music in the background.
+	 * The service under test
 	 */
 	private PlaybackService playbackService = null;
 
