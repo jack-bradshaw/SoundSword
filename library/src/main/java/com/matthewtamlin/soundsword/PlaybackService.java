@@ -185,8 +185,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	/**
 	 * The listener to receive callbacks when the active operation completes.
 	 */
-	private final Set<OnOperationFinishedListener> onOperationFinishedListeners =
-			new HashSet<>();
+	private final Set<OnOperationFinishedListener> onOperationFinishedListeners = new HashSet<>();
 
 	/**
 	 * Default value for the volume during audio focus ducking.
@@ -301,7 +300,7 @@ public class PlaybackService extends Service implements AudioManager.OnAudioFocu
 	/**
 	 * By default, this Service will run indefinitely when it is started by a call to {@link
 	 * Context#startService(Intent)}. Passing true to this method sets the Service to automatically
-	 * stop itself once playback completes (with looping is disabled) or if an unrecoverable error
+	 * stop itself when playback completes (and looping is disabled), or when an unrecoverable error
 	 * occurs. This Service still follows the standard lifecycle for Android Services, and will not
 	 * shutdown if there are still bound clients (assuming BIND_AUTO_CREATE is used in {@link
 	 * Context#bindService(Intent, ServiceConnection, int)}).
