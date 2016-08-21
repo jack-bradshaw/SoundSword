@@ -10,7 +10,6 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ScrollView;
@@ -21,6 +20,8 @@ import com.matthewtamlin.soundsword.ImmutableVolumeProfile;
 import com.matthewtamlin.soundsword.LocalPlayableMedia;
 import com.matthewtamlin.soundsword.PlayableMedia;
 import com.matthewtamlin.soundsword.PlaybackService;
+import com.matthewtamlin.soundsword.PlaybackService.FailureMode;
+import com.matthewtamlin.soundsword.PlaybackService.Operation;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	/**
 	 * Used during logging to identify this class.
 	 */
+	@SuppressWarnings("unused")
 	private static final String TAG = "[TestPlaybackService]";
 
 	/**
@@ -107,6 +109,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	/**
 	 * Initialises the testing environment and checks that all preconditions pass.
 	 */
+	@SuppressWarnings("ResultOfMethodCallIgnored")
 	private void setup() {
 		// Check precondition 1: Read/write external file storage permission is granted
 		final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -294,25 +297,20 @@ public class TestPlaybackService extends AppCompatActivity {
 			playbackService.addOnOperationFinishedListener(
 					new PlaybackService.OnOperationFinishedListener() {
 						@Override
-						public void onOperationFinished(PlaybackService service,
-								PlaybackService.Operation operation, PlaybackService.FailureMode
-								failureMode) {
-							Log.d(TAG,
-									"[OnOperationFinishedListener] [operation: " + operation + "]" +
-											"[failure mode: " + failureMode + "]");
+						public void onOperationFinished(final PlaybackService service,
+								final Operation operation, final FailureMode failureMode) {
+							Snackbar.make(rootView, "Operation finished: " + operation + " with " +
+									"failure mode: " + failureMode, Snackbar.LENGTH_LONG).show();
 						}
 					});
 
 			playbackService.addOnOperationStartedListener(
 					new PlaybackService.OnOperationStartedListener() {
 						@Override
-						public void OnOperationStarted(PlaybackService service,
-								PlaybackService.Operation operation) {
-							Log.d(TAG,
-									"[OnOperationStartedListener] [operation: " + operation + "]");
-							Log.d(TAG, "[Current operation according to " +
-									"playbackService.getCurrentOperation(): " +
-									playbackService.getCurrentOperation() + "]");
+						public void OnOperationStarted(final PlaybackService service,
+								final Operation operation) {
+							Snackbar.make(rootView, "Operation started: " + operation,
+									Snackbar.LENGTH_LONG).show();
 						}
 					});
 
@@ -320,7 +318,8 @@ public class TestPlaybackService extends AppCompatActivity {
 					new PlaybackService.OnPendingOperationsCancelledListener() {
 						@Override
 						public void onPendingOperationsCancelled(PlaybackService service) {
-							Log.d(TAG, "[OnPendingOperationsCancelledListener]");
+							Snackbar.make(rootView, "Operations cancelled", Snackbar.LENGTH_LONG)
+									.show();
 						}
 					});
 
@@ -329,7 +328,8 @@ public class TestPlaybackService extends AppCompatActivity {
 						@Override
 						public void onPlaybackComplete(PlaybackService service,
 								PlayableMedia completedMedia) {
-							Log.d(TAG, "[OnPlaybackCompleteListener]");
+							Snackbar.make(rootView, "Playback complete", Snackbar.LENGTH_LONG)
+									.show();
 						}
 					});
 		}
