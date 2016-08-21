@@ -61,6 +61,11 @@ public class TestPlaybackService extends AppCompatActivity {
 			.newInstance().withDuckingVolume(0.1f).withNormalVolume(1f);
 
 	/**
+	 * The position to seek to when testing the ability to seek, measured in milliseconds.
+	 */
+	private static final int TEST_SEEK_POSITION_MS = 20000;
+
+	/**
 	 * The service under test
 	 */
 	private PlaybackService playbackService = null;
@@ -219,7 +224,7 @@ public class TestPlaybackService extends AppCompatActivity {
 	 */
 	public void testSeek(final View v) {
 		if (playbackServiceIsBound()) {
-			playbackService.requestSeekToOperation(4000);
+			playbackService.requestSeekToOperation(TEST_SEEK_POSITION_MS);
 		}
 	}
 
