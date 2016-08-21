@@ -1,5 +1,6 @@
 package samaritanheuristics.testapp;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressLint("SetTextI18n") // Localisation not necessary for testing
 public class TestPlaybackService extends AppCompatActivity {
 	/**
 	 * Used during logging to identify this class.
@@ -80,7 +82,6 @@ public class TestPlaybackService extends AppCompatActivity {
 		setContentView(R.layout.activity_test_playback_service);
 		initialiseMedia();
 		bindViews();
-		createButtons();
 	}
 
 	@Override
@@ -108,272 +109,146 @@ public class TestPlaybackService extends AppCompatActivity {
 		content = (LinearLayout) findViewById(R.id.content);
 	}
 
-	private void createButtons() {
-		final Button bindUnbind = new Button(this);
-		content.addView(bindUnbind);
-		bindUnbind.setText("bind to service");
-		bindUnbind.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: bind]");
-
-				if (mediaServiceIsBound()) {
-					unbindPlaybackService();
-					bindUnbind.setText("bind to service");
-				} else {
-					bindPlaybackService();
-					bindUnbind.setText("unbind from service");
-				}
-			}
-		});
-
-		final Button startStop = new Button(this);
-		content.addView(startStop);
-		startStop.setText("start service");
-		startStop.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: bind]");
-
-				if (serviceIsStarted) {
-					stopService(new Intent(TestPlaybackService.this, PlaybackService.class));
-					startStop.setText("start service");
-					serviceIsStarted = false;
-				} else {
-					startService(new Intent(TestPlaybackService.this, PlaybackService.class));
-					startStop.setText("stop service");
-					serviceIsStarted = true;
-				}
-			}
-		});
-
-		final Button setMedia = new Button(this);
-		content.addView(setMedia);
-		setMedia.setText("set media source (toggles between sources)");
-		setMedia.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: set media button]");
-
-				if (mediaServiceIsBound()) {
-					Log.d(TAG, "[Operation should be valid: " + playbackService.isValidOperation
-							(PlaybackService.Operation.CHANGE_MEDIA_SOURCE) + "]");
-
-					playbackService.requestChangeMediaSourceOperation(songs.get(mediaIndex), null);
-					mediaIndex = (mediaIndex + 1) % songs.size();
-				}
-			}
-		});
-
-		final Button play = new Button(this);
-		content.addView(play);
-		play.setText("play");
-		play.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: play button]");
-
-				if (mediaServiceIsBound()) {
-
-					Log.d(TAG, "[Operation should be valid: " + playbackService.isValidOperation
-							(PlaybackService.Operation.PLAY) + "]");
-
-					playbackService.requestPlayMediaOperation();
-				}
-			}
-		});
-
-		final Button pause = new Button(this);
-		content.addView(pause);
-		pause.setText("pause");
-		pause.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: pause button]");
-
-				if (mediaServiceIsBound()) {
-					Log.d(TAG, "[Operation should be valid: " + playbackService.isValidOperation
-							(PlaybackService.Operation.PAUSE) + "]");
-
-					playbackService.requestPauseMediaOperation();
-				}
-			}
-		});
-
-		final Button stop = new Button(this);
-		content.addView(stop);
-		stop.setText("stop");
-		stop.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: stop button]");
-
-				if (mediaServiceIsBound()) {
-					Log.d(TAG, "[Operation should be valid: " + playbackService.isValidOperation
-							(PlaybackService.Operation.STOP) + "]");
-
-					playbackService.requestStopMediaOperation();
-				}
-			}
-		});
-
-		final Button seek = new Button(this);
-		content.addView(seek);
-		seek.setText("seek to 4 sec");
-		seek.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: seek button]");
-
-				if (mediaServiceIsBound()) {
-					Log.d(TAG, "[Operation should be valid: " + playbackService.isValidOperation
-							(PlaybackService.Operation.SEEK_TO) + "]");
-
-					playbackService.requestSeekToOperation(4000);
-				}
-			}
-		});
-
-		final Button looping = new Button(this);
-		content.addView(looping);
-		looping.setText("enable looping");
-		looping.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: looping button]");
-
-				if (mediaServiceIsBound()) {
-					playbackService.enableLooping(!playbackService.loopingIsEnabled());
-					looping.setText(
-							playbackService.loopingIsEnabled() ? "disable looping" : "enable " +
-									"looping");
-				}
-			}
-		});
-
-		final Button showPosition = new Button(this);
-		content.addView(showPosition);
-		showPosition.setText("show current position");
-		showPosition.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: show position]");
-
-				if (mediaServiceIsBound()) {
-					Log.d(TAG, "[current position: " + playbackService.getCurrentPosition() + "]");
-				}
-			}
-		});
-
-		final Button isPlaying = new Button(this);
-		content.addView(isPlaying);
-		isPlaying.setText("currently playing?");
-		isPlaying.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: is playing");
-
-				if (mediaServiceIsBound()) {
-					Log.d(TAG, "[currently playing?: " + playbackService.isPlaying() + "]");
-				}
-			}
-		});
-
-		final Button volume = new Button(this);
-		content.addView(volume);
-		volume.setText("use quiet volume");
-		volume.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: volume]");
-
-				if (mediaServiceIsBound()) {
-					if (playbackService.getVolumeProfile() == QUIET_VOLUME_PROFILE) {
-						playbackService.setVolumeProfile(LOUD_VOLUME_PROFILE);
-						volume.setText("use quiet volume");
-					} else {
-						playbackService.setVolumeProfile(QUIET_VOLUME_PROFILE);
-						volume.setText("use loud volume");
-					}
-				}
-			}
-		});
-
-		final Button reset = new Button(this);
-		content.addView(reset);
-		reset.setText("reset service");
-		reset.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: reset]");
-
-				if (mediaServiceIsBound()) {
-					playbackService.reset();
-				}
-			}
-		});
-
-		final Button automaticStop = new Button(this);
-		content.addView(automaticStop);
-		automaticStop.setText("Enable automatic stop");
-		automaticStop.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d(TAG, "[on click: enable/disable automatic stop]");
-
-				if (mediaServiceIsBound()) {
-					if (playbackService.serviceWillStopAutomatically()) {
-						playbackService.stopServiceAutomatically(false);
-						automaticStop.setText("Enable automatic stop");
-					} else {
-						playbackService.stopServiceAutomatically(true);
-						automaticStop.setText("Disable automatic stop");
-					}
-				}
-			}
-		});
+	public void testBindUnbindService(final View v) {
+		if (mediaServiceIsBound()) {
+			unbindPlaybackService();
+			((Button) v).setText("Bind to service");
+		} else {
+			bindPlaybackService();
+			((Button) v).setText("Unbind from service");
+		}
 	}
 
-	private void registerListeners() {
-		playbackService.addOnOperationFinishedListener(
-				new PlaybackService.OnOperationFinishedListener() {
-					@Override
-					public void onOperationFinished(PlaybackService service,
-							PlaybackService.Operation operation, PlaybackService.FailureMode
-							failureMode) {
-						Log.d(TAG, "[OnOperationFinishedListener] [operation: " + operation + "]" +
-								"[failure mode: " + failureMode + "]");
-					}
-				});
+	public void testStartStopService(final View v) {
+		if (serviceIsStarted) {
+			stopService(new Intent(TestPlaybackService.this, PlaybackService.class));
+			serviceIsStarted = false;
+			((Button) v).setText("Start service");
+		} else {
+			startService(new Intent(TestPlaybackService.this, PlaybackService.class));
+			serviceIsStarted = true;
+			((Button) v).setText("Stop service");
+		}
+	}
 
-		playbackService.addOnOperationStartedListener(
-				new PlaybackService.OnOperationStartedListener() {
-					@Override
-					public void OnOperationStarted(PlaybackService service,
-							PlaybackService.Operation operation) {
-						Log.d(TAG, "[OnOperationStartedListener] [operation: " + operation + "]");
-						Log.d(TAG, "[Current operation according to " +
-								"playbackService.getCurrentOperation(): " +
-								playbackService.getCurrentOperation() + "]");
-					}
-				});
+	public void testSetMedia(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.requestChangeMediaSourceOperation(songs.get(mediaIndex), null);
+			mediaIndex = (mediaIndex + 1) % songs.size();
+		}
+	}
 
-		playbackService.addOnPendingOperationsCancelledListener(
-				new PlaybackService.OnPendingOperationsCancelledListener() {
-					@Override
-					public void onPendingOperationsCancelled(PlaybackService service) {
-						Log.d(TAG, "[OnPendingOperationsCancelledListener]");
-					}
-				});
+	public void testPlayMedia(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.requestPlayMediaOperation();
+		}
+	}
 
-		playbackService.addOnPlaybackCompleteListener(
-				new PlaybackService.OnPlaybackCompleteListener() {
-					@Override
-					public void onPlaybackComplete(PlaybackService service,
-							PlayableMedia completedMedia) {
-						Log.d(TAG, "[OnPlaybackCompleteListener]");
-					}
-				});
+	public void testPauseMedia(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.requestPauseMediaOperation();
+		}
+	}
+
+	public void testStopMedia(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.requestStopMediaOperation();
+		}
+	}
+
+	public void testSeek(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.requestSeekToOperation(4000);
+		}
+	}
+
+	public void testToggleLooping(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.enableLooping(!playbackService.loopingIsEnabled());
+			((Button) v).setText(playbackService.loopingIsEnabled() ? "Disable looping" : "Enable looping");
+		}
+	}
+
+	public void testShowStatus(final View v) {
+		if (mediaServiceIsBound()) {
+			// TODO
+		}
+	}
+
+	public void testChangeVolume(final View v) {
+		if (mediaServiceIsBound()) {
+			if (playbackService.getVolumeProfile() == QUIET_VOLUME_PROFILE) {
+				playbackService.setVolumeProfile(LOUD_VOLUME_PROFILE);
+				((Button) v).setText("Use quiet volume profile");
+			} else {
+				playbackService.setVolumeProfile(QUIET_VOLUME_PROFILE);
+				((Button) v).setText("Use loud volume profile");
+			}
+		}
+	}
+
+	public void testReset(final View v) {
+		if (mediaServiceIsBound()) {
+			playbackService.reset();
+		}
+	}
+
+	public void testToggleAutomaticStop(final View v) {
+		if (mediaServiceIsBound()) {
+			if (playbackService.serviceWillStopAutomatically()) {
+				playbackService.stopServiceAutomatically(false);
+				((Button) v).setText("Enable automatic stop");
+			} else {
+				playbackService.stopServiceAutomatically(true);
+				((Button) v).setText("Disable automatic stop");
+			}
+		}
+	}
+
+	public void registerListeners() {
+		if (mediaServiceIsBound()) {
+			playbackService.addOnOperationFinishedListener(
+					new PlaybackService.OnOperationFinishedListener() {
+						@Override
+						public void onOperationFinished(PlaybackService service,
+								PlaybackService.Operation operation, PlaybackService.FailureMode
+								failureMode) {
+							Log.d(TAG,
+									"[OnOperationFinishedListener] [operation: " + operation + "]" +
+											"[failure mode: " + failureMode + "]");
+						}
+					});
+
+			playbackService.addOnOperationStartedListener(
+					new PlaybackService.OnOperationStartedListener() {
+						@Override
+						public void OnOperationStarted(PlaybackService service,
+								PlaybackService.Operation operation) {
+							Log.d(TAG,
+									"[OnOperationStartedListener] [operation: " + operation + "]");
+							Log.d(TAG, "[Current operation according to " +
+									"playbackService.getCurrentOperation(): " +
+									playbackService.getCurrentOperation() + "]");
+						}
+					});
+
+			playbackService.addOnPendingOperationsCancelledListener(
+					new PlaybackService.OnPendingOperationsCancelledListener() {
+						@Override
+						public void onPendingOperationsCancelled(PlaybackService service) {
+							Log.d(TAG, "[OnPendingOperationsCancelledListener]");
+						}
+					});
+
+			playbackService.addOnPlaybackCompleteListener(
+					new PlaybackService.OnPlaybackCompleteListener() {
+						@Override
+						public void onPlaybackComplete(PlaybackService service,
+								PlayableMedia completedMedia) {
+							Log.d(TAG, "[OnPlaybackCompleteListener]");
+						}
+					});
+		}
 	}
 
 	private boolean mediaServiceIsBound() {
