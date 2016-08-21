@@ -1,5 +1,6 @@
 package samaritanheuristics.testapp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -7,13 +8,15 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.matthewtamlin.android_utilities_library.helpers.AssetsHelper;
+import com.matthewtamlin.android_utilities_library.helpers.PermissionsHelper;
 import com.matthewtamlin.soundsword.ImmutableVolumeProfile;
 import com.matthewtamlin.soundsword.PlayableMedia;
 import com.matthewtamlin.soundsword.PlaybackService;
@@ -24,6 +27,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 @SuppressLint("SetTextI18n") // Localisation not necessary for testing
 public class TestPlaybackService extends AppCompatActivity {
 	/**
@@ -32,23 +37,27 @@ public class TestPlaybackService extends AppCompatActivity {
 	private static final String TAG = "[TestPlaybackService]";
 
 	/**
+	 * The location to store the testing music files.
+	 */
+	private static final File TEST_MUSIC_LOCATION = new File(Environment
+			.getExternalStorageDirectory(), "/SoundSwordTesting");
+
+	/**
 	 * Very quiet volume profile.
 	 */
 	private static final ImmutableVolumeProfile QUIET_VOLUME_PROFILE = ImmutableVolumeProfile
-			.newInstance()
-			.withDuckingVolume(0.05f).withNormalVolume(0.2f);
+			.newInstance().withDuckingVolume(0.05f).withNormalVolume(0.2f);
 
 	/**
 	 * Very loud volume profile.
 	 */
 	private static final ImmutableVolumeProfile LOUD_VOLUME_PROFILE = ImmutableVolumeProfile
-			.newInstance()
-			.withDuckingVolume(0.1f).withNormalVolume(1f);
+			.newInstance().withDuckingVolume(0.1f).withNormalVolume(1f);
 
 	/**
-	 * The filenames of the songs to play (in assets).
+	 * The filenames of the songs to play (stored in assets).
 	 */
-	private static final String[] SONG_FILENAMES = new String[]{"track1.mp3", "track2.mp3",
+	private static final String[] TEST_SONG_FILENAMES = new String[]{"track1.mp3", "track2.mp3",
 			"track3.mp3", "track4.mp3"};
 
 	/**
@@ -57,9 +66,9 @@ public class TestPlaybackService extends AppCompatActivity {
 	private PlaybackService playbackService = null;
 
 	/**
-	 * The View to display the testing buttons in.
+	 * The root view of the Activity layout.
 	 */
-	private LinearLayout content;
+	private ScrollView rootView;
 
 	/**
 	 * The songs to play.
@@ -80,8 +89,8 @@ public class TestPlaybackService extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_test_playback_service);
-		initialiseMedia();
-		bindViews();
+		initialiseTestingEnvironment();
+		rootView = (ScrollView) findViewById(R.id.activity_test_playback_service_root);
 	}
 
 	@Override
@@ -90,23 +99,28 @@ public class TestPlaybackService extends AppCompatActivity {
 		unbindPlaybackService();
 	}
 
-	private void initialiseMedia() {
-		File target = new File(Environment.getExternalStorageDirectory(), "/SoundSword");
-		target.mkdir();
+	private void initialiseTestingEnvironment() {
+		// Check precondition 1: Read/write external file storage permission is granted
+		final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+		assertThat("Precondition failed. Write external storage permission is required.",
+				PermissionsHelper.permissionsAreGranted(this, permissions));
 
+		// Make the directory if it already exists
+		TEST_MUSIC_LOCATION.mkdir();
+		assertThat("Precondition failed. Test music location must exist.", TEST_MUSIC_LOCATION
+				.exists());
+
+		// Prepare music files
 		try {
-			AssetsHelper.copyAssetsToDirectory(getAssets(), SONG_FILENAMES, target);
+			AssetsHelper.copyAssetsToDirectory(getAssets(), TEST_SONG_FILENAMES,
+					TEST_MUSIC_LOCATION);
 
-			for (String s : SONG_FILENAMES) {
-				songs.add(Song.fromFile(new File(target, "/" + s)));
+			for (final String s : TEST_SONG_FILENAMES) {
+				songs.add(Song.fromFile(new File(TEST_MUSIC_LOCATION, "/" + s)));
 			}
-		} catch (IOException e) {
-			Log.e(TAG, "[Asset copy error]");
+		} catch (final IOException e) {
+			assertThat("Precondition failed. Could not prepare all music files", false);
 		}
-	}
-
-	private void bindViews() {
-		content = (LinearLayout) findViewById(R.id.content);
 	}
 
 	public void testBindUnbindService(final View v) {
@@ -165,13 +179,15 @@ public class TestPlaybackService extends AppCompatActivity {
 	public void testToggleLooping(final View v) {
 		if (mediaServiceIsBound()) {
 			playbackService.enableLooping(!playbackService.loopingIsEnabled());
-			((Button) v).setText(playbackService.loopingIsEnabled() ? "Disable looping" : "Enable looping");
+			((Button) v).setText(
+					playbackService.loopingIsEnabled() ? "Disable looping" : "Enable looping");
 		}
 	}
 
 	public void testShowStatus(final View v) {
 		if (mediaServiceIsBound()) {
-			// TODO
+			Snackbar.make(rootView, "Current position: " + playbackService.getCurrentPosition(),
+					Snackbar.LENGTH_LONG).show();
 		}
 	}
 
