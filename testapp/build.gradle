@@ -22,4 +22,6 @@ dependencies {
     compile project(':library')
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile files('libs/commons-io-2.4.jar')
+	compile 'com.android.support:design:23.4.0'
+	compile 'org.hamcrest:hamcrest-library:1.3'
 }
