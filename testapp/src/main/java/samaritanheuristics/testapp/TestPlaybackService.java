@@ -30,7 +30,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SuppressLint("SetTextI18n") // Localisation not necessary for testing
+@SuppressLint("SetTextI18n") // Not important during testin
 public class TestPlaybackService extends AppCompatActivity {
 	/**
 	 * The location to store the testing music files.
