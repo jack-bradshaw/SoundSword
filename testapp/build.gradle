@@ -1,27 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+	compileSdkVersion 25
+	buildToolsVersion "24.0.3"
 
-    defaultConfig {
-        applicationId "samaritanheuristics.testapp"
-        minSdkVersion 16
-        targetSdkVersion 23
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+	defaultConfig {
+		applicationId "samaritanheuristics.testapp"
+		minSdkVersion 16
+		targetSdkVersion 25
+	}
 }
 
 dependencies {
-    compile project(':library')
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile files('libs/commons-io-2.4.jar')
-	compile 'com.android.support:design:23.4.0'
+	compile project(':library')
+	compile 'com.android.support:appcompat-v7:25.1.0'
+	compile 'com.android.support:design:25.1.0'
 	compile 'org.hamcrest:hamcrest-library:1.3'
 }
