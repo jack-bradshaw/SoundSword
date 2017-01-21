@@ -30,6 +30,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
+//TODO class needs a major overhaul	
 @SuppressLint("SetTextI18n") // Not important during testin
 public class TestPlaybackService extends AppCompatActivity {
 	/**
