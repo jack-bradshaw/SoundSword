@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "samaritanheuristics.testapp"
@@ -14,7 +14,6 @@ android {
 dependencies {
     compile project(':library')
     compile 'com.android.support:appcompat-v7:25.1.0'
-    compile files('libs/commons-io-2.4.jar')
 	compile 'com.android.support:design:25.1.0'
 	compile 'org.hamcrest:hamcrest-library:1.3'
 }
