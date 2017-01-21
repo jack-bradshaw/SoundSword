@@ -18,7 +18,7 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
-	compile 'org.apache.commons:commons-lang3::3.5'
+	compile 'org.apache.commons:commons-lang3:3.5'
 	compile 'com.matthew-tamlin:android-utilities:1.4.0'
 
 	testCompile 'org.hamcrest:hamcrest-library:1.3'
