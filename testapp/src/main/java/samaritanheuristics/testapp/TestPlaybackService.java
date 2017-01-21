@@ -33,12 +33,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @SuppressLint("SetTextI18n") // Localisation not necessary for testing
 public class TestPlaybackService extends AppCompatActivity {
 	/**
-	 * Used during logging to identify this class.
-	 */
-	@SuppressWarnings("unused")
-	private static final String TAG = "[TestPlaybackService]";
-
-	/**
 	 * The location to store the testing music files.
 	 */
 	private static final File TEST_MUSIC_LOCATION = new File(Environment
