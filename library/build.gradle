@@ -1,23 +1,23 @@
 apply plugin: 'com.android.library'
 
 ext {
-    PUBLISH_GROUP_ID = 'com.matthew-tamlin'
-    PUBLISH_ARTIFACT_ID = 'sound-sword'
-    PUBLISH_VERSION = '1.1.0'
+	PUBLISH_GROUP_ID = 'com.matthew-tamlin'
+	PUBLISH_ARTIFACT_ID = 'sound-sword'
+	PUBLISH_VERSION = '1.1.0'
 }
 
 android {
 	compileSdkVersion 25
 	buildToolsVersion "24.0.3"
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 25
-    }
+	defaultConfig {
+		minSdkVersion 14
+		targetSdkVersion 25
+	}
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.1.0'
+	compile 'com.android.support:appcompat-v7:25.1.0'
 	compile 'org.apache.commons:commons-lang3:3.5'
 	compile 'com.matthew-tamlin:android-utilities:1.4.0'
 
