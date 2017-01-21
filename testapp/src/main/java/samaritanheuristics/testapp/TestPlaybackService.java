@@ -30,14 +30,9 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@SuppressLint("SetTextI18n") // Localisation not necessary for testing
+//TODO class needs a major overhaul	
+@SuppressLint("SetTextI18n") // Not important during testin
 public class TestPlaybackService extends AppCompatActivity {
-	/**
-	 * Used during logging to identify this class.
-	 */
-	@SuppressWarnings("unused")
-	private static final String TAG = "[TestPlaybackService]";
-
 	/**
 	 * The location to store the testing music files.
 	 */
