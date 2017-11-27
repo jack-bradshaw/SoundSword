@@ -4,7 +4,23 @@ SoundSword is an Android library which massively simplifies the task of playing 
 
 This library was created as an exercise in producing an open source library. It is now deprecated and will no longer be supported.
 
-To use this library, add `compile 'com.matthew-tamlin:sound-sword:1.0.1'` to your gradle build file.
+## Dependency
+To use the library, add the following to your gradle build file:
+```groovy
+repositories {
+	jcenter()
+}
+
+dependencies {
+	// For Android Gradle plugin 3.0.0+ projects:
+	implementation 'com.matthew-tamlin:sound-sword:1.0.1'
+
+	// For older projects:
+	compile 'com.matthew-tamlin:sound-sword:1.0.1'
+}
+```
+
+Older versions are available in [the Maven repo](https://bintray.com/matthewtamlin/maven/SoundSword).
 
 ## Usage
 The PlaybackService class is the primary class of this library. Since services operate independently of the activity lifecycle, instances of PlaybackService can be used to play media as the user navigates between activities or when the app is in the background. Binding to the service allows clients to control playback, and registering for callbacks allows clients to receive feedback. 
