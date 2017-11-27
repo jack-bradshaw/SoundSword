@@ -60,12 +60,5 @@ PlaybackService conforms to the Android guidelines for media playback. Playback 
 ## License
 This library is licensed under the Apache v2.0 licence. Have a look at [the license](LICENSE) for details.
 
-## Dependencies and attribution
-This library uses the following open source libraries as level 1 dependencies:
-- [Android Support Library](https://developer.android.com/topic/libraries/support-library/index.html), licensed under the Apache 2.0 license.
-- [Apache Commons Lang](https://commons.apache.org/proper/commons-lang/), licensed under the Apache 2.0 license.
-
-This repository contains [music](testapp/src/main/assets) sourced from the [Bensound](http://www.bensound.com/royalty-free-music/electronica) royalty free music collection. The music is licensed by the creator under the 'Creative Commons - Attribution - No Derivative Works' license.
-
 ## Compatibility
 This library is compatible with Android 14 and up.
