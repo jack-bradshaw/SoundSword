@@ -2,8 +2,25 @@
 # SoundSword
 SoundSword is an Android library which massively simplifies the task of playing audio in the background. The [PlaybackService](library/src/main/java/com/matthewtamlin/soundsword/PlaybackService.java) class of the library is designed to play any object which implements the [PlayableMedia](library/src/main/java/com/matthewtamlin/soundsword/PlayableMedia.java) interface. At the core of the service is the Android MediaPlayer API, but you no longer need to worry about nasty try-catch blocks or illegal state exceptions. The service tracks the internal state of the media player to make sure that only allowed operations are requested. If an operation which cannot be performed is requested, then the service will intercept the operation and prevent it from being executed.
 
-## Download
-Releases are made available through jCentre. Add `compile 'com.matthew-tamlin:sound-sword:1.1.0'` to your gradle build file to use the latest version. Older versions are available in the [maven repo](https://bintray.com/matthewtamlin/maven/SoundSword/view).
+This library was created as an exercise in producing an open source library. It is now deprecated and will no longer be supported.
+
+## Dependency
+To use the library, add the following to your gradle build file:
+```groovy
+repositories {
+	jcenter()
+}
+
+dependencies {
+	// For Android Gradle plugin 3.0.0+ projects:
+	implementation 'com.matthew-tamlin:sound-sword:1.0.1'
+
+	// For older projects:
+	compile 'com.matthew-tamlin:sound-sword:1.0.1'
+}
+```
+
+Older versions are available in [the Maven repo](https://bintray.com/matthewtamlin/maven/SoundSword).
 
 ## Usage
 The PlaybackService class is the primary class of this library. Since services operate independently of the activity lifecycle, instances of PlaybackService can be used to play media as the user navigates between activities or when the app is in the background. Binding to the service allows clients to control playback, and registering for callbacks allows clients to receive feedback. 
@@ -42,13 +59,6 @@ PlaybackService conforms to the Android guidelines for media playback. Playback 
 
 ## License
 This library is licensed under the Apache v2.0 licence. Have a look at [the license](LICENSE) for details.
-
-## Dependencies and attribution
-This library uses the following open source libraries as level 1 dependencies:
-- [Android Support Library](https://developer.android.com/topic/libraries/support-library/index.html), licensed under the Apache 2.0 license.
-- [Apache Commons Lang](https://commons.apache.org/proper/commons-lang/), licensed under the Apache 2.0 license.
-
-This repository contains [music](testapp/src/main/assets) sourced from the [Bensound](http://www.bensound.com/royalty-free-music/electronica) royalty free music collection. The music is licensed by the creator under the 'Creative Commons - Attribution - No Derivative Works' license.
 
 ## Compatibility
 This library is compatible with Android 14 and up.
