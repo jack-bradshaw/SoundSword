@@ -12,11 +12,7 @@ repositories {
 }
 
 dependencies {
-	// For Android Gradle plugin 3.0.0+ projects:
 	implementation 'com.matthew-tamlin:sound-sword:1.0.1'
-
-	// For older projects:
-	compile 'com.matthew-tamlin:sound-sword:1.0.1'
 }
 ```
 
