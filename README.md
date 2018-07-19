@@ -8,11 +8,11 @@ This library was created as an exercise in producing an open source library. It 
 To use the library, add the following to your gradle build file:
 ```groovy
 repositories {
-	jcenter()
+  jcenter()
 }
 
 dependencies {
-	implementation 'com.matthew-tamlin:sound-sword:1.0.1'
+  implementation 'com.matthew-tamlin:sound-sword:1.0.1'
 }
 ```
 
