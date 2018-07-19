@@ -53,8 +53,5 @@ See the Javadoc of the callbacks for a more in depth explanation.
 
 PlaybackService conforms to the Android guidelines for media playback. Playback will automatically stop whenever audio focus is lost, and playback will automatically pause whenever the system indicates that playback is "becoming noisy" (e.g. headphones have been removed). The service also listens for requests for transient audio ducking and changes the volume appropriately. These features cannot be disabled, however they can be customised by changing the volume profile.
 
-## License
-This library is licensed under the Apache v2.0 licence. Have a look at [the license](LICENSE) for details.
-
 ## Compatibility
 This library is compatible with Android 14 and up.
